@@ -12,6 +12,21 @@ const router = new VueRouter({
   routes
 })
 
+window.popStateDetected = false
+window.addEventListener('popstate', () => {
+  window.popStateDetected = true
+})
+
+router.beforeEach((to, from, next) => {
+  const IsItABackButton = window.popStateDetected
+  window.popStateDetected = false
+  if (IsItABackButton && from.meta.someLogica) {
+    next(false)
+    return ''
+  }
+  next()
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
